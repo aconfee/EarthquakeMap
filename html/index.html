@@ -19,7 +19,7 @@
       <div id='list-header'>
         <p>LOCATIONS</p>
       </div>
-      <div class='list-item' ng-click='moveToMarker($index)' ng-repeat='earthquake in data'>
+      <div class='list-item' ng-class="{'selected-item': $index==selectedItem}" ng-click='moveToMarker($index)' ng-repeat='earthquake in data'>
         <span class='left'>{{ earthquake.name }}</span>
         <span class='right'>Mag: {{ earthquake.size }}</span>
       </div>

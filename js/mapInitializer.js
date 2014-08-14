@@ -1,11 +1,14 @@
 // Initializer is called immediately and all variables are contained. 
 function MapInitializer($scope){
 	var self = this;
+	$scope.selectedItem = 0;
 
 	// Store earthquake location data
 	$scope.data = [
 		{name:"thing1", lat:-40.397, lng:190.644, size:10}, 
-		{name:"thing2", lat:-30.397, lng:160.644, size:5}
+		{name:"thing2", lat:-30.397, lng:160.644, size:5}, 
+		{name:"thing3", lat:-20.397, lng:100.644, size:7}, 
+		{name:"thing4", lat:-35.397, lng:120.644, size:8}
 	];
 
 	// Create and store markers for earthquake
@@ -27,7 +30,7 @@ function MapInitializer($scope){
 
 	self.initialize = function(){
 		var mapOptions = {
-	  		center: new google.maps.LatLng(-34.397, 150.644),
+	  		center: new google.maps.LatLng($scope.data[0].lat, $scope.data[0].lng),
 	  		zoom: 5,
 	  		mapTypeId: google.maps.MapTypeId.ROADMAP  
 		};
@@ -40,6 +43,7 @@ function MapInitializer($scope){
 
 	$scope.moveToMarker = function($index){
 		self.map.panTo(markers[$index].getPosition());
+		$scope.selectedItem = $index;
 	};
 
 	// Add listener to wait for page load.
