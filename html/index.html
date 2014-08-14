@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html ng-app>
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <link rel='stylesheet' type='text/css' href='../styles/page.css' />
+    <!-- font -->
+    <link href='http://fonts.googleapis.com/css?family=Oxygen' rel='stylesheet' type='text/css'>
+
+    <script type="text/javascript"
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA_TERm0JDbwiS_6APoLxAT8I_WOBugiCc">
+    </script>
+  </head>
+  <body>
+    <div id='location-list'>
+      <div id='list-header'>
+        <p>LOCATIONS</p>
+      </div>
+      <div class='list-item' onclick='moveToMarker(1)'>
+        <span class='left'>MyName</span>
+        <span class='right'>Size</span>
+      </div>
+    </div>
+    <div id="map-canvas"/>
+
+    <!-- Load scripts at bottom for 'quicker' load -->
+    <script src='../js/mapInitializer.js'></script>
+    <!-- AngularJS to avoid duplicate HTML for list. -->
+  <script src="../bower_components/angular/angular.min.js"></script>
+  </body>
+</html>
