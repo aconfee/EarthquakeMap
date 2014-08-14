@@ -11,13 +11,13 @@
     </script>
   </head>
   <body>
-    <div id='location-list'>
+    <div id='location-list' ng-controller='MapInitializer'>
       <div id='list-header'>
         <p>LOCATIONS</p>
       </div>
-      <div class='list-item' onclick='moveToMarker(1)'>
-        <span class='left'>MyName</span>
-        <span class='right'>Size</span>
+      <div class='list-item' ng-click='moveToMarker($index)' ng-repeat='earthquake in data'>
+        <span class='left'>{{ earthquake.name }}</span>
+        <span class='right'>Mag: {{ earthquake.size }}</span>
       </div>
     </div>
     <div id="map-canvas"/>
