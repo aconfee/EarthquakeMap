@@ -11,18 +11,17 @@ body {
 
 #map-canvas { 
 	height: 100%;
-	width:85%;
+	width:100%;
 	display: inline-block;
-	float:right;
+	position:absolute;
 }
 
 #location-list{
-	width:14%;
+	width:200px;
+	min-width:200px;
 	height:100%;
 	background-color: #E9EAED;
 	display: inline-block;
-
-	margin:0 5px;
 }
 
 #list-header{
