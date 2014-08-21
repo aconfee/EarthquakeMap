@@ -8,7 +8,7 @@
 
     <!-- AngularJS to avoid duplicate HTML for list. -->
     <!-- Load at beginning to avoid {{}} artifacts -->
-  <script src="../bower_components/angular/angular.min.js"></script>
+    <script src="../bower_components/angular/angular.min.js"></script>
 
     <script type="text/javascript"
       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA_TERm0JDbwiS_6APoLxAT8I_WOBugiCc">
@@ -27,6 +27,8 @@
     <div id="map-canvas"/>
 
     <!-- Load scripts at bottom for 'quicker' load -->
+    <script src="../bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="../vendor/jeoQuery.js"></script>
     <script src='../js/mapInitializer.js'></script>
   </body>
 </html>
