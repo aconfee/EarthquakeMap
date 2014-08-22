@@ -8,6 +8,7 @@ function MapInitializer($scope){
 
 	// Create and store markers for earthquake
 	var markers = [];
+	var topTenMarkers = [];
 
 	// Use one infowindow for map.
 	self.infoWindow = new google.maps.InfoWindow({
@@ -25,7 +26,7 @@ function MapInitializer($scope){
 			east: '180',
 			west: '-180'
 		}, function(data){
-			self.placeEarthquakeMarkersCallback(data);
+			self.placeTopTenMarkersCallback(data);
 			var earthquakeData = JSON.parse(JSON.stringify(data));
 			var length = earthquakeData['earthquakes'].length;
 			for(var i = 0; i < 10; ++i){
@@ -36,6 +37,33 @@ function MapInitializer($scope){
 
 			$scope.$apply();
 		});
+	};
+
+	self.placeTopTenMarkersCallback = function(data){
+		var earthquakeData = JSON.parse(JSON.stringify(data));
+
+		// Clear old markers and set new ones with updated info.
+		for(var i = 0; i < 10; ++i)
+		{
+			// Create markers for locations
+			self.setMarker(new google.maps.LatLng(earthquakeData['earthquakes'][i]['lat'], earthquakeData['earthquakes'][i]['lng']),
+				"<h3>INFO</h3>" +
+				"<p>Magnitude: " + earthquakeData['earthquakes'][i]['magnitude'] + "</p>" +
+				"<p>Depth: " + earthquakeData['earthquakes'][i]['depth'] + "</p>" +
+				"<p>Source: " + earthquakeData['earthquakes'][i]['src'] + "</p>" +
+				"<p>ID: " + earthquakeData['earthquakes'][i]['eqid'] + "</p>" +
+				"<p>Time: " + earthquakeData['earthquakes'][i]['datetime'] + "</p>",
+				topTenMarkers);
+
+			// Set marker on map
+			topTenMarkers[i].setMap(self.map);
+
+			// Attach an info window to each marker
+			google.maps.event.addListener(topTenMarkers[i], 'click', function() {
+					self.infoWindow.setContent(this.title);
+			    	self.infoWindow.open(self.map, this);
+		  	});
+		}
 	};
 
 	self.initialize = function(){
@@ -52,7 +80,7 @@ function MapInitializer($scope){
 	};
 
 	$scope.moveToMarker = function($index){
-		self.map.panTo(markers[$index].getPosition());
+		self.map.panTo(topTenMarkers[$index].getPosition());
 		$scope.selectedItem = $index;
 	};
 
@@ -64,14 +92,14 @@ function MapInitializer($scope){
 		markers = [];
 	};
 
-	self.setMarker = function(location, title){
+	self.setMarker = function(location, title, markerList){
 		var newMark = new google.maps.Marker({ 
 			position: location, 
 			map: self.map,
 			title: title
 		});
 
-		markers.push(newMark);
+		markerList.push(newMark);
 	};
 
 	self.getEarthquakes = function(data, callback) {
@@ -111,7 +139,8 @@ function MapInitializer($scope){
 				"<p>Depth: " + earthquakeData['earthquakes'][i]['depth'] + "</p>" +
 				"<p>Source: " + earthquakeData['earthquakes'][i]['src'] + "</p>" +
 				"<p>ID: " + earthquakeData['earthquakes'][i]['eqid'] + "</p>" +
-				"<p>Time: " + earthquakeData['earthquakes'][i]['datetime'] + "</p>");
+				"<p>Time: " + earthquakeData['earthquakes'][i]['datetime'] + "</p>",
+				markers);
 
 			// Set marker on map
 			markers[i].setMap(self.map);
