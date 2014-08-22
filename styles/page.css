@@ -16,6 +16,26 @@ body {
 	position:absolute;
 }
 
+#search-form{
+	margin: 5px 15px;
+	color:#3498DB;
+}
+
+#search-form input{
+	height:20px;
+	width:98%;
+
+	margin-bottom: 2px;
+}
+
+#search-form p{
+	margin-bottom: 2px;
+}
+
+#search-form button{
+	width: 100%;
+}
+
 #location-list{
 	width:200px;
 	min-width:200px;

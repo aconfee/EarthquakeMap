@@ -16,6 +16,7 @@ function MapInitializer($scope){
 
 	// Access map in multiple functions
 	self.map = null;
+	self.geocoder = new google.maps.Geocoder();
 
 	self.setPositions = function(){
 		for(var i = 0; i < $scope.data.length; ++i){
@@ -45,6 +46,59 @@ function MapInitializer($scope){
 		self.map.panTo(markers[$index].getPosition());
 		$scope.selectedItem = $index;
 	};
+
+
+	$scope.search = function(){
+		var address = $('#city').val();
+		self.geocoder.geocode( { 'address': address}, function(results, status) {
+	    if (status == google.maps.GeocoderStatus.OK) {
+
+	    	// Place map center at city
+		    self.map.setCenter(results[0].geometry.location);
+
+		    // // Place markers for earthquakes in area
+		    var lat = results[0].geometry.location.lat();
+		    var lng = results[0].geometry.location.lng();
+
+		    var n = lat + 1;
+		    var s = lat - 1;
+		    var e = lng + 1;
+		    var w = lng - 1;
+		    var earthquakeData;
+
+		    var data =jeoquery.getGeoNames('earthquakes', {north: n.toString(),
+		    										south: s.toString(),
+		    										east: e.toString(),
+		    										west: w.toString()
+		    									}, function(data){
+		    										earthquakeData = JSON.parse(JSON.stringify(data));
+		    										console.log(earthquakeData);
+
+		    										for(var i = 0; i < 10; ++i)
+		    										{
+		    											var newMark = new google.maps.Marker({ 
+															position: new google.maps.LatLng(earthquakeData['earthquakes'][i]['lat'], earthquakeData['earthquakes'][i]['lng']), 
+															map: self.map 
+														});
+
+														//console.log(earthquakeData[i].lat);
+														//console.log(newMark);
+
+														markers.push(newMark);
+														//console.log(markers);
+		    										}
+
+		    										for (var i = 0; i < markers.length; i++) {
+													    markers[i].setMap(self.map);
+													    //console.log(markers);
+													}
+		    									});
+
+	    } else {
+	        alert('Geocode was not successful for the following reason: ' + status);
+	    }
+	  });
+	}
 
 	// Add listener to wait for page load.
 	google.maps.event.addDomListener(window, 'load', self.initialize);

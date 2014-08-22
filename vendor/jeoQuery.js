@@ -10,7 +10,7 @@ var jeoquery = (function ($) {
     var my = {};
 
     my.defaultData = {
-      userName: 'demo',
+      userName: 'aconfee',
       lang: 'en'
     };
     my.defaultCountryCode = 'US';
@@ -162,7 +162,7 @@ var jeoquery = (function ($) {
                     }));
                 });
             },
-            minLength: 2,
+            minLength: 1,
             select: function( event, ui ) {
               if (ui && ui.item && options && options.callback) {
                 options.callback(ui.item.details);

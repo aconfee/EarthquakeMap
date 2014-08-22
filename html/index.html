@@ -8,6 +8,9 @@
 
     <!-- AngularJS to avoid duplicate HTML for list. -->
     <!-- Load at beginning to avoid {{}} artifacts -->
+    <script src="../vendor/jquery-ui-1.11.1/external/jquery/jquery.js"></script>
+    <script src="../vendor/jquery-ui-1.11.1/jquery-ui.min.js"></script>
+    <script src="../vendor/jeoQuery.js"></script>
     <script src="../bower_components/angular/angular.min.js"></script>
 
     <script type="text/javascript"
@@ -16,6 +19,11 @@
   </head>
   <body>
     <div id='location-list' ng-controller='MapInitializer'>
+      <form id='search-form'>
+        <p>Enter city:</p>
+        <input class="input-large" id="city" type="text"/>
+        <button ng-click='search()'>SEARCH</button>
+      <form>
       <div id='list-header'>
         <p>LOCATIONS</p>
       </div>
@@ -27,8 +35,7 @@
     <div id="map-canvas"/>
 
     <!-- Load scripts at bottom for 'quicker' load -->
-    <script src="../bower_components/jquery/dist/jquery.min.js"></script>
-    <script src="../vendor/jeoQuery.js"></script>
+    <!--script src="../bower_components/jquery/dist/jquery.min.js"></script-->
     <script src='../js/mapInitializer.js'></script>
   </body>
 </html>
