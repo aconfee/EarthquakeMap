@@ -54,6 +54,14 @@ body {
 	margin-bottom: 30px;
 }
 
+#top-ten{
+	top:150px;
+	bottom:20px;
+	width: 175px;
+	overflow-y:auto;
+	position: absolute;
+}
+
 .list-item{
 	height:20px;
 	margin:10px 15px;
