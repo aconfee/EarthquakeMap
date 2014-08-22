@@ -124,9 +124,10 @@ function MapInitializer($scope){
     self.placeEarthquakeMarkersCallback = function(data){
     	var earthquakeData = JSON.parse(JSON.stringify(data));
 		var length = earthquakeData['earthquakes'].length;
+		console.log(earthquakeData);
 
 		// Error check
-		if(length === 0) window.alert("No earthquakes near " + address);
+		if(length == 0) window.alert("No earthquakes near " + $('#city').val());
 
 		// Clear old markers and set new ones with updated info.
 		self.clearMarkers();
