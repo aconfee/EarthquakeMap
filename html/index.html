@@ -6,16 +6,8 @@
     <!-- font -->
     <link href='http://fonts.googleapis.com/css?family=Oxygen' rel='stylesheet' type='text/css'>
 
-    <!-- AngularJS to avoid duplicate HTML for list. -->
-    <!-- Load at beginning to avoid {{}} artifacts -->
-    <script src="../vendor/jquery-ui-1.11.1/external/jquery/jquery.js"></script>
-    <script src="../vendor/jquery-ui-1.11.1/jquery-ui.min.js"></script>
-    <script src="../vendor/jeoQuery.js"></script>
-    <script src="../bower_components/angular/angular.min.js"></script>
-
-    <script type="text/javascript"
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA_TERm0JDbwiS_6APoLxAT8I_WOBugiCc">
-    </script>
+    <!-- GOOGLE API -->
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA_TERm0JDbwiS_6APoLxAT8I_WOBugiCc"></script>
   </head>
   <body>
     <div id='location-list' ng-controller='MapInitializer'>
@@ -34,8 +26,14 @@
     </div>
     <div id="map-canvas"/>
 
-    <!-- Load scripts at bottom for 'quicker' load -->
-    <!--script src="../bower_components/jquery/dist/jquery.min.js"></script-->
+    <!-- Bower components -->
+    <script src="../bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="../bower_components/angular/angular.min.js"></script>
+
+    <!-- Vendor -->
+    <script src="../vendor/jeoQuery.js"></script>
+
+    <!-- Controllers -->
     <script src='../js/mapInitializer.js'></script>
   </body>
 </html>
