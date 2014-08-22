@@ -34,6 +34,10 @@ function MapInitializer($scope){
 		}
 	};
 
+	self.initializeTopTen = function(){
+
+	};
+
 	self.initialize = function(){
 		var mapOptions = {
 	  		center: new google.maps.LatLng($scope.data[0].lat, $scope.data[0].lng),
@@ -68,7 +72,26 @@ function MapInitializer($scope){
 		});
 
 		markers.push(newMark);
-	}
+	};
+
+	self.getEarthquakes = function(data, callback) {
+      var deferred = $.Deferred();
+      // TODO: validate method(exists), and params
+        $.ajax({
+            url: 'http://api.geonames.org/earthquakesJSON',
+            dataType: 'jsonp',
+            data: $.extend({}, {userName: 'aconfee', lang: 'en'}, data),
+            success: function(data) {
+              deferred.resolve(data);
+              if(!!callback) callback(data);
+            },
+            error: function (xhr, textStatus) {
+              deferred.reject(xhr, textStatus);
+              alert('Ooops, geonames server returned: ' + textStatus);
+            }
+        });
+        return deferred.promise();
+    };
 
 	$scope.searchEarthquakes = function(){
 		var address = $('#city').val();
@@ -83,7 +106,7 @@ function MapInitializer($scope){
 		    var lng = results[0].geometry.location.lng();
 		    var boundingBoxOffset = 2;
 
-		    var data =jeoquery.getGeoNames('earthquakes', {
+		    var data = self.getEarthquakes({
 		    	north: (lat + boundingBoxOffset).toString(),
 				south: (lat - boundingBoxOffset).toString(),
 				east: (lng + boundingBoxOffset).toString(),
@@ -93,9 +116,7 @@ function MapInitializer($scope){
 				var length = earthquakeData['earthquakes'].length;
 
 				// Error check
-				if(length === 0){
-					window.alert("No earthquakes near " + address);
-				}
+				if(length === 0) window.alert("No earthquakes near " + address);
 
 				// Clear old markers and set new ones with updated info.
 				self.clearMarkers();
@@ -125,7 +146,7 @@ function MapInitializer($scope){
 	        alert('Geocode was not successful for the following reason: ' + status);
 	    }
 	  });
-	}
+	};
 
 	// Add listener to wait for page load.
 	google.maps.event.addDomListener(window, 'load', self.initialize);
