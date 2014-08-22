@@ -124,10 +124,12 @@ function MapInitializer($scope){
     self.placeEarthquakeMarkersCallback = function(data){
     	var earthquakeData = JSON.parse(JSON.stringify(data));
 		var length = earthquakeData['earthquakes'].length;
-		console.log(earthquakeData);
 
 		// Error check
-		if(length == 0) window.alert("No earthquakes near " + $('#city').val());
+		if(length == 0){
+			window.alert("No earthquakes near " + $('#city').val());
+			return;
+		}
 
 		// Clear old markers and set new ones with updated info.
 		self.clearMarkers();
@@ -152,6 +154,10 @@ function MapInitializer($scope){
 			    	self.infoWindow.open(self.map, this);
 		  	});
 		}
+
+		// Show default
+		self.infoWindow.setContent(markers[0].title);
+		self.infoWindow.open(self.map, markers[0]);
     };
 
 	$scope.searchEarthquakes = function(){
