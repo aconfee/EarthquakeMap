@@ -22,10 +22,10 @@
       <form id='search-form'>
         <p>Enter city:</p>
         <input class="input-large" id="city" type="text"/>
-        <button ng-click='search()'>SEARCH</button>
+        <button ng-click='searchEarthquakes()'>SEARCH</button>
       <form>
       <div id='list-header'>
-        <p>LOCATIONS</p>
+        <p>TOP 10</p>
       </div>
       <div class='list-item' ng-class="{'selected-item': $index==selectedItem}" ng-click='moveToMarker($index)' ng-repeat='earthquake in data'>
         <span class='left'>{{ earthquake.name }}</span>

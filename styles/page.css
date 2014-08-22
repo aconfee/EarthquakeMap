@@ -34,6 +34,7 @@ body {
 
 #search-form button{
 	width: 100%;
+	margin-bottom: 10px;
 }
 
 #location-list{
