@@ -85,11 +85,14 @@ body {
 }
 
 .selected-item{
-	box-shadow: inset -3px 3px 5px #888888;
+	box-shadow: inset -3px 3px 5px #003354;
 	transform: scale(1);	
+
+	color:white;
+	background-color: #3498DB;
 }
 
 .selected-item:hover{
-	box-shadow: inset -3px 3px 5px #888888;
+	box-shadow: inset -3px 3px 5px #003354;
 	transform: scale(1);	
 }

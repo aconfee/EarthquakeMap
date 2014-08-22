@@ -4,12 +4,7 @@ function MapInitializer($scope){
 	$scope.selectedItem = 0;
 
 	// Store earthquake location data
-	$scope.data = [
-		{name:"thing1", lat:-40.397, lng:190.644, size:10}, 
-		{name:"thing2", lat:-30.397, lng:160.644, size:5}, 
-		{name:"thing3", lat:-20.397, lng:100.644, size:7}, 
-		{name:"thing4", lat:-35.397, lng:120.644, size:8}
-	];
+	$scope.topTenData = [];
 
 	// Create and store markers for earthquake
 	var markers = [];
@@ -23,24 +18,29 @@ function MapInitializer($scope){
 	self.map = null;
 	self.geocoder = new google.maps.Geocoder();
 
-	self.setPositions = function(){
-		for(var i = 0; i < $scope.data.length; ++i){
-			var marker = new google.maps.Marker({ 
-				position: new google.maps.LatLng($scope.data[i].lat, $scope.data[i].lng), 
-				map: self.map 
-			});
-
-			markers.push(marker);
-		}
-	};
-
 	self.initializeTopTen = function(){
+		var data = self.getEarthquakes({
+	    	north: '90',
+			south: '-90',
+			east: '180',
+			west: '-180'
+		}, function(data){
+			self.placeEarthquakeMarkersCallback(data);
+			var earthquakeData = JSON.parse(JSON.stringify(data));
+			var length = earthquakeData['earthquakes'].length;
+			for(var i = 0; i < 10; ++i){
+				$scope.topTenData.push({lat:earthquakeData['earthquakes'][i]['lat'], 
+					lng:earthquakeData['earthquakes'][i]['lng'], 
+					size:earthquakeData['earthquakes'][i]['magnitude']})
+			}
 
+			$scope.$apply();
+		});
 	};
 
 	self.initialize = function(){
 		var mapOptions = {
-	  		center: new google.maps.LatLng($scope.data[0].lat, $scope.data[0].lng),
+	  		center: new google.maps.LatLng(47.53, 122.30),
 	  		zoom: 5,
 	  		mapTypeId: google.maps.MapTypeId.ROADMAP  
 		};
@@ -48,7 +48,7 @@ function MapInitializer($scope){
 		self.map = new google.maps.Map(document.getElementById("map-canvas"), 
 			mapOptions);
 
-		self.setPositions();
+		self.initializeTopTen();
 	};
 
 	$scope.moveToMarker = function($index){
@@ -93,6 +93,37 @@ function MapInitializer($scope){
         return deferred.promise();
     };
 
+    self.placeEarthquakeMarkersCallback = function(data){
+    	var earthquakeData = JSON.parse(JSON.stringify(data));
+		var length = earthquakeData['earthquakes'].length;
+
+		// Error check
+		if(length === 0) window.alert("No earthquakes near " + address);
+
+		// Clear old markers and set new ones with updated info.
+		self.clearMarkers();
+		for(var i = 0; i < length; ++i)
+		{
+			// Create markers for locations
+			self.setMarker(new google.maps.LatLng(earthquakeData['earthquakes'][i]['lat'], earthquakeData['earthquakes'][i]['lng']),
+				"<h3>INFO</h3>" +
+				"<p>Magnitude: " + earthquakeData['earthquakes'][i]['magnitude'] + "</p>" +
+				"<p>Depth: " + earthquakeData['earthquakes'][i]['depth'] + "</p>" +
+				"<p>Source: " + earthquakeData['earthquakes'][i]['src'] + "</p>" +
+				"<p>ID: " + earthquakeData['earthquakes'][i]['eqid'] + "</p>" +
+				"<p>Time: " + earthquakeData['earthquakes'][i]['datetime'] + "</p>");
+
+			// Set marker on map
+			markers[i].setMap(self.map);
+
+			// Attach an info window to each marker
+			google.maps.event.addListener(markers[i], 'click', function() {
+					self.infoWindow.setContent(this.title);
+			    	self.infoWindow.open(self.map, this);
+		  	});
+		}
+    };
+
 	$scope.searchEarthquakes = function(){
 		var address = $('#city').val();
 		self.geocoder.geocode( { 'address': address}, function(results, status) {
@@ -112,34 +143,7 @@ function MapInitializer($scope){
 				east: (lng + boundingBoxOffset).toString(),
 				west: (lng - boundingBoxOffset).toString()
 			}, function(data){
-				var earthquakeData = JSON.parse(JSON.stringify(data));
-				var length = earthquakeData['earthquakes'].length;
-
-				// Error check
-				if(length === 0) window.alert("No earthquakes near " + address);
-
-				// Clear old markers and set new ones with updated info.
-				self.clearMarkers();
-				for(var i = 0; i < length; ++i)
-				{
-					// Create markers for locations
-					self.setMarker(new google.maps.LatLng(earthquakeData['earthquakes'][i]['lat'], earthquakeData['earthquakes'][i]['lng']),
-						"<h3>INFO</h3>" +
-    					"<p>Magnitude: " + earthquakeData['earthquakes'][i]['magnitude'] + "</p>" +
-    					"<p>Depth: " + earthquakeData['earthquakes'][i]['depth'] + "</p>" +
-    					"<p>Source: " + earthquakeData['earthquakes'][i]['src'] + "</p>" +
-    					"<p>ID: " + earthquakeData['earthquakes'][i]['eqid'] + "</p>" +
-    					"<p>Time: " + earthquakeData['earthquakes'][i]['datetime'] + "</p>");
-
-					// Set marker on map
-					markers[i].setMap(self.map);
-
-					// Attach an info window to each marker
-					google.maps.event.addListener(markers[i], 'click', function() {
-							self.infoWindow.setContent(this.title);
-					    	self.infoWindow.open(self.map, this);
-				  	});
-				}
+				self.placeEarthquakeMarkersCallback(data);
 			});
 
 	    } else {
